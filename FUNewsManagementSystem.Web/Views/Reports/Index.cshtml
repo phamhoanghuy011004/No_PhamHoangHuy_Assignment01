@@ -1,0 +1,79 @@
+﻿@model FUNewsManagementSystem.Web.ViewModels.ReportViewModel
+
+@{
+    ViewData["Title"] = "News Report";
+}
+
+<h2 class="mb-4">News Statistic Report</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+<form method="post" class="row g-3 mb-4">
+    @Html.AntiForgeryToken()
+    <div class="col-md-3">
+        <label asp-for="StartDate" class="form-label"></label>
+        <input asp-for="StartDate" class="form-control" type="date" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="EndDate" class="form-label"></label>
+        <input asp-for="EndDate" class="form-control" type="date" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Generate Report</button>
+    </div>
+</form>
+
+@if (Model.Results != null && Model.Results.Any())
+{
+    <div class="alert alert-info">
+        Found <strong>@Model.Results.Count</strong> news article(s) (sorted by CreatedDate descending).
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Headline</th>
+                <th>Category</th>
+                <th>Created Date</th>
+                <th>Author</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Results)
+            {
+                <tr>
+                    <td>@item.NewsArticleID</td>
+                    <td>@item.Headline</td>
+                    <td>@item.CategoryName</td>
+                    <td>@(item.CreatedDate?.ToString("dd/MM/yyyy HH:mm"))</td>
+                    <td>@item.CreatedByName</td>
+                    <td>
+                        @if (item.NewsStatus == true)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Inactive</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (ViewContext.HttpContext.Request.Method == "POST")
+{
+    <div class="alert alert-warning">No news found in the selected period.</div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

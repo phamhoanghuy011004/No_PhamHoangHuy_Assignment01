@@ -1,0 +1,42 @@
+﻿@model FUNewsManagementSystem.Web.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h2 class="mb-4">My Profile</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label asp-for="AccountEmail" class="form-label"></label>
+                <input asp-for="AccountEmail" class="form-control" readonly />
+            </div>
+            <div class="mb-3">
+                <label asp-for="AccountName" class="form-label"></label>
+                <input asp-for="AccountName" class="form-control" />
+                <span asp-validation-for="AccountName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="AccountPassword" class="form-label"></label>
+                <input asp-for="AccountPassword" class="form-control" />
+                <span asp-validation-for="AccountPassword" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

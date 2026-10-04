@@ -1,0 +1,75 @@
+﻿@model FUNewsManagementSystem.Web.Models.NewsArticleModel
+
+@{
+    ViewData["Title"] = Model.Headline;
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        &larr; Back to News
+    </a>
+</div>
+
+<article class="card shadow-sm">
+    <div class="card-body">
+        <header class="mb-4">
+            <h1 class="card-title h2">@Model.Headline</h1>
+
+            @if (!string.IsNullOrEmpty(Model.NewsTitle) && Model.NewsTitle != Model.Headline)
+            {
+                <h2 class="h5 text-muted">@Model.NewsTitle</h2>
+            }
+
+            <div class="text-muted small mt-2">
+                <span class="me-3">
+                    <strong>Category:</strong>
+                    <span class="badge bg-info text-dark">@Model.CategoryName</span>
+                </span>
+
+                @if (Model.CreatedDate.HasValue)
+                {
+                    <span class="me-3">
+                        <strong>Published:</strong> @Model.CreatedDate.Value.ToString("dd/MM/yyyy HH:mm")
+                    </span>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.CreatedByName))
+                {
+                    <span class="me-3">
+                        <strong>Author:</strong> @Model.CreatedByName
+                    </span>
+                }
+            </div>
+
+            @if (Model.Tags != null && Model.Tags.Any())
+            {
+                <div class="mt-2">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <span class="badge bg-secondary me-1">@tag.TagName</span>
+                    }
+                </div>
+            }
+        </header>
+
+        <hr />
+
+        <div class="news-content mt-4" style="line-height: 1.8; font-size: 1.05rem;">
+            @if (!string.IsNullOrEmpty(Model.NewsContent))
+            {
+                @Html.Raw(Model.NewsContent.Replace("\n", "<br />"))
+            }
+            else
+            {
+                <p class="text-muted">No content available.</p>
+            }
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.NewsSource))
+        {
+            <div class="mt-4 pt-3 border-top text-muted small">
+                <strong>Source:</strong> @Model.NewsSource
+            </div>
+        }
+    </div>
+</article>

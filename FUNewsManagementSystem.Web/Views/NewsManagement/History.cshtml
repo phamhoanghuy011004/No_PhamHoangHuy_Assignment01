@@ -1,0 +1,37 @@
+﻿@model List<FUNewsManagementSystem.Web.Models.NewsArticleModel>
+@{
+    ViewData["Title"] = "My News History";
+}
+
+<h2 class="mb-4">My News History</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">You have not created any news yet.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Headline</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Created Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.NewsArticleID</td>
+                    <td>@item.Headline</td>
+                    <td>@item.CategoryName</td>
+                    <td>@(item.NewsStatus == true ? "Active" : "Inactive")</td>
+                    <td>@(item.CreatedDate?.ToString("dd/MM/yyyy HH:mm"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
